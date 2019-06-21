@@ -99,7 +99,7 @@
 <script>
     let num = 0;//定义题目顺序变量
     let check = new Array();//定义数组存放学生选中的选项值
-    let i = 1;
+
     $(function () {
         $.ajax({
             url: "servlet/QuestionListServlet",
@@ -107,8 +107,8 @@
             dataType: "json",
             success: function (response) {//先显示第一题
                 a(response, num);
-                $("#a0").html("这是第" + i + "页");
-            }
+
+    }
 
         });
 
@@ -123,6 +123,8 @@
             } else if ($("#D").prop("checked")) {
                 check[num] = $("#D").val();
             }
+
+
             $.ajax({
                 url: "servlet/AnswerServlet",//访问服务器资源需要加虚拟目录
                 data: {
@@ -133,97 +135,120 @@
                 type: "post",
                 traditional: true,
                 success: function (mes) {
-                    if (mes != null) {//如果统计页面返回了值
-                        window.location.href = "result.html";
-                    }
-                },
-                waitMsg: '请稍后'
+
+                    window.location.href = "result.html";
+                }
             });
         });
 
+
+
         //上一题按钮
         $("#before").click(function () {
-            if (--i > 0) {
-                $("#a0").html("这是第" + (i) + "页");
-            } else {
-                $("#a0").html("没有上一页了");
-                $("#before").attr("disabled", "disabled");
-            }
-            if ("A" == check[num - 1]) {
-                $("#A").prop('checked', 'checked');
+            $("#next").removeAttr("disabled");
 
-            } else if ("B" == check[num - 1]) {
-                $("#B").prop('checked', 'checked');
-
-            } else if ("C" == check[num - 1]) {
-                $("#C").prop('checked', 'checked');
-
-            } else if ("D" == check[num - 1]) {
-                $("#D").prop('checked', 'checked');
-
-            }
-
-
-            num--;
-            //禁用4个答案
-            $("input[type='radio']").attr("disabled", "disabled");//attr是指节点的属性,是attribute的缩写,
             $.ajax({
                 url: "servlet/QuestionListServlet",
                 method: "GET",
                 dataType: "json",
                 success: function (reponse) {
+                    //禁用答案
+                    $("input[type='radio']").attr("disabled", "disabled");//attr是指节点的属性,是attribute的缩写,
 
-                    if (num === 0 || num === reponse.length) {
+
+                    if (num === 0) {
                         return;
                     }
+
+                    num--;
                     a(reponse, num);
+
+                    if (check[num] == null) {//如果这题没选就解锁
+                        $("input[type='radio']").removeAttr("disabled");
+                    }
+                    if ("A" == check[num]) {//显示上一题选了什么
+                        $("#A").prop('checked', 'checked');
+
+                    } else if ("B" == check[num]) {
+                        $("#B").prop('checked', 'checked');
+
+                    } else if ("C" == check[num]) {
+                        $("#C").prop('checked', 'checked');
+
+                    } else if ("D" == check[num]) {
+                        $("#D").prop('checked', 'checked');
+
+                    }
+                    $("input[type='radio']").attr("disabled", "disabled");
                 }
+
             });
         });
         //下一页按钮
         $("#next").click(function () {
+
             $("#before").attr("disabled", false);//移除上一页按钮的锁定状态
 
-            $("#a0").html("这是第" + (++i) + "页");
 
-            if ($("#A").prop("checked")) {
-                check[num] = $("#A").val();
-            } else if ($("#B").prop("checked")) {
-                check[num] = $("#B").val();
-            } else if ($("#C").prop("checked")) {
-                check[num] = $("#C").val();
-            } else if ($("#D").prop("checked")) {
-                check[num] = $("#D").val();
-            }
+            Preservation(num)//存储学生答题选项
 
-              $("input[type='radio']").prop("checked", "")//点击下一题后移除选择按钮的选中状态
+            $("input[type='radio']").prop("checked", "");
 
             $.ajax({
                 url: "servlet/QuestionListServlet",
                 method: "GET",
                 dataType: "json",
                 success: function (response) {
-                    if (num === response.length) {
+                    if (num === response.length - 1) {
+                        $("#next").attr("disabled", "disabled");
+
                         return;
                     }
+
                     num++;
                     a(response, num);
-                  if(check[num]==null){//如果选项数组没有选择过答案则移除异常锁定状态
-                      $("input[type='radio']").removeAttr("disabled");
-                  }
+                    if (check[num] == null) {
+                        $("input[type='radio']").removeAttr("disabled");//点击下一题后移除选择按钮的选中状态
+                    }
+
+                    if ("A" == check[num]) {//如果下一页选过了就显示某个选项
+                        $("#A").prop('checked', 'checked');
+
+                    } else if ("B" == check[num]) {
+                        $("#B").prop('checked', 'checked');
+
+                    } else if ("C" == check[num]) {
+                        $("#C").prop('checked', 'checked');
+
+                    } else if ("D" == check[num]) {
+                        $("#D").prop('checked', 'checked');
+
+                    }
+
 
                 }
-
             });
         });
     });
 
-    function a(response, num) {//显示第一题的方法
+    function a(response, num) {//显示题的方法
         $("#title").html(response[num]["question"]);
         $("label[for='A']").html(response[num]["a"]);
         $("label[for='B']").html(response[num]["b"]);
         $("label[for='C']").html(response[num]["c"]);
         $("label[for='D']").html(response[num]["d"]);
+    }
+
+    function Preservation() {
+        if ($("#A").prop("checked")) {
+            check[num] = $("#A").val();
+        } else if ($("#B").prop("checked")) {
+            check[num] = $("#B").val();
+        } else if ($("#C").prop("checked")) {
+            check[num] = $("#C").val();
+        } else if ($("#D").prop("checked")) {
+            check[num] = $("#D").val();
+        }
     }
 
 </script>
