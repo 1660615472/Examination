@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>成绩显示</title>
+    <style>
+        table {
+            margin: 50px auto 0 auto;
+            border-collapse: collapse;
+            text-align: center;
+            vertical-align: center;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            width: 100px;
+            height: 30px;
+        }
+
+        h2{
+           color: red; 
+        }
+    </style>
+</head>
+<body>
+<div>
+
+    <h2 align="center">考试成绩单</h2>
+</div>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<script>
+    //通过url获得后台的数据
+    let requestURL ='servlet/OneStudentServlet';
+    $(function () {
+        //设置标题  这是标题数组
+        let header =["准考证号","答对","答错","分数","是否合格"];
+        let studentinfo=["ecn","yes","no", "score","qualified"];
+        $.ajax({
+            url:requestURL,
+            method:'GET',
+            dataType:'json',
+            success:function (response) {
+                //动态创建表头
+                let $table = $("<table></table>");
+                //记住空白页面需要添加tbody
+                $('body').append($table);
+                let $tr = $('<tr></tr>');
+                $table.append($tr);
+                //遍历表头数组动态创建表标题（th）
+                for(let i = 0 ;i<header.length;i++){
+                    let $th = $("<th></th>");
+                    $tr.append($th);
+                    switch (i) {    //使用switch 如果i=N 就在N格设置属性
+                        case 0:$th.attr("style","width:133px");
+                        break;
+                        case 1:$th.attr("style","width:133px");
+                            break;
+                        case 2:$th.attr("style","width:133px");
+                            break;
+                        case 3:$th.attr("style","width:133px");
+                            break;
+                        case 4:$th.attr("style","width:133px");
+                            break;
+                    }
+                    $th.html(header[i]);
+
+                }
+
+                //遍历考生信息
+                for(let i = 0 ;i<response.length;i++){
+                   let $tr1 = $("<tr></tr>");//创建一行
+                   $("table").append($tr1);//把行添加到表里
+                    for (let j = 0; j < studentinfo.length; j++){//遍历
+                        let $td1= $("<td></td>");
+                        $tr1.append($td1);
+                        if(j<5){      //response[0][studentinfo[0] 第一个考生的准考证号
+                            $td1.html(response[i][studentinfo[j]]);
+                        }
+                    }
+                }
+
+
+            }
+
+        });
+    });
+
+
+</script>
+</body>
+</html>

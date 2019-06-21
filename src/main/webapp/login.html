@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登陆页面</title>
+    <style>
+       h1{
+           font-size:40px
+        }
+        h5{
+            font-weight:normal;font-size:13px;
+            margin-top: 300px;
+        }
+
+        body{
+       text-align:center;
+        }
+        .adminButton+.studentButtom{
+            margin-top:150px ;
+
+        }
+        .adminButton+.studentButtom{
+            margin-left: 20px;
+
+        }
+
+       button {
+           width: 120px;
+           height: 34px;
+           border-radius: 12px;
+           border-width: 0;
+           background-color:royalblue;
+       }
+
+
+    </style>
+</head>
+<body>
+<h1 style="text-align:center">江苏2018年小客车科目四考试</h1>
+<div id="form">
+
+
+    <button class="adminButton">管理员登陆</button>
+
+
+    <button class="studentButtom">学生登陆</button>
+
+
+</div>
+<DIV>
+    <H5>其然软件 Copyright© 2018</H5>
+</DIV>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script>
+        $(function () {//jquery入口程序
+            $(".adminButton").click(function () {
+                location.href="adminLogin.html";//单机跳转到管理员登陆界面
+            });
+
+
+        });
+
+        $(function () {
+            $(".studentButtom").click(function () {
+               location.href="studentLogin.html";//单机跳转到学生登陆界面
+            });
+        });
+    </script>
+</body>
+</html>
