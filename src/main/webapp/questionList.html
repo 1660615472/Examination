@@ -117,8 +117,8 @@
     let requestURL='servlet/QuestionListServlet';
 
     $(function () {
-        let header = ["序号", "题干", "题目内容", "编辑", "删除"];
-        let question=["no","question","详细内容","编辑","删除"]
+        let header = ["序号", "题干", "A选项","B选项","C选项","D选项", "编辑", "删除"];
+        let question=["no","question","a","b","c","d","编辑","删除"]
         $.ajax({
             url: requestURL,
             method:'GET',
@@ -134,9 +134,9 @@
                     switch (i) {//使用switch
                         case 0:$th.attr("style","width:120px");
                             break;
-                        case 1:$th.attr("style","width:400px");
+                        case 1:$th.attr("style","width:120px");
                             break;
-                        case 2:$th.attr("style","width:225px");
+                        case 2:$th.attr("style","width:120px");
                             break;
                         case 3:$th.attr("style","width:120px");
                             break;
@@ -151,10 +151,11 @@
                     for (let j = 0; j < question.length; j++) {
                         let $th= $("<td></td>");
                         $tr1.append($th);
-                        if(j<2){
+                        if(j<6){
                             $th.html(response[i][question[j]]);
                         }else{
-                            $th.html("<a href='https://www.baidu.com'>"+[question[j]]+"</a>");
+
+                            $th.html("<a href='#'>"+[question[j]]+"</a>");
                         }
 
                     }

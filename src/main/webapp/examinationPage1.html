@@ -124,7 +124,7 @@
                 check[num] = $("#D").val();
             }
             $.ajax({
-                url: "servlet/AnswerServlet",
+                url: "servlet/AnswerServlet",//访问服务器资源需要加虚拟目录
                 data: {
                     "answer": check //把答案数组通过ajax的url传到servlet处理
                 },
